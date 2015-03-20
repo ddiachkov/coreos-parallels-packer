@@ -1,0 +1,53 @@
+{
+  "variables": {
+    "cloud-config": "cloud-config.yml"
+  },
+
+  "builders": [
+    {
+      "type": "parallels-iso",
+      "guest_os_type": "linux-2.6",
+      "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
+      "iso_checksum": "9c24586a8655262dfbd6a3c3f5ab07c7",
+      "iso_checksum_type": "md5",
+      "parallels_tools_mode": "disable",
+
+      "http_directory": ".",
+
+      "ssh_username": "core",
+      "ssh_key_path": "keys/vagrant",
+
+      "boot_wait": "10s",
+      "boot_command": [
+        "wget -O ~/.ssh/authorized_keys http://{{ .HTTPIP }}:{{ .HTTPPort }}/keys/vagrant.pub",
+        "<enter>",
+        "chmod 0600 ~/.ssh/authorized_keys",
+        "<enter>",
+        "sudo systemctl start sshd.service",
+        "<enter>"
+      ],
+
+      "shutdown_command": "sudo shutdown now",
+
+      "prlctl" : [
+        [ "set", "{{ .Name }}", "--memsize", "1024" ],
+        [ "set", "{{ .Name }}", "--cpus", "2" ]
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "{{ user `cloud-config` }}",
+      "destination": "/tmp/cloud-config.yml"
+    },
+
+    {
+      "type": "shell",
+      "inline": [
+        "sudo coreos-install -C stable -c /tmp/cloud-config.yml -d /dev/sda"
+      ]
+    }
+  ]
+}

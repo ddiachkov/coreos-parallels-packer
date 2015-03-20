@@ -1,0 +1,20 @@
+{
+  "variables": {
+    "box": null
+  },
+
+  "builders": [
+    {
+      "type": "parallels-pvm",
+      "source_path": "{{ user `box` }}",
+      "parallels_tools_mode": "disable",
+
+      "ssh_username": "core",
+      "ssh_key_path": "keys/vagrant",
+
+      "shutdown_command": "sudo shutdown now"
+    }
+  ],
+
+  "post-processors": [ "vagrant" ]
+}

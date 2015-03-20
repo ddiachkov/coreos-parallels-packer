@@ -1,0 +1,25 @@
+{
+  "builders": [
+    {
+      "type": "parallels-pvm",
+      "source_path": "output-parallels-iso/packer-parallels-iso.pvm",
+
+      "parallels_tools_mode": "attach",
+      "parallels_tools_flavor": "lin",
+
+      "ssh_username": "core",
+      "ssh_key_path": "keys/vagrant",
+      "ssh_wait_timeout": "10s",
+
+      "boot_wait": "10s",
+      "shutdown_command": "sudo shutdown now"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/install-parallels-tools.sh"
+    }
+  ]
+}

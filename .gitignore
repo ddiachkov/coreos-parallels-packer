@@ -1,0 +1,4 @@
+packer_cache
+output-parallels-iso
+output-parallels-pwm
+custom-cloud-config.yml
