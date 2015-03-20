@@ -2,8 +2,8 @@
 
 coreos:
   etcd:
-    addr: $private_ipv4:4001
-    peer-addr: $private_ipv4:7001
+    addr: 0.0.0.0:4001
+    peer-addr: 0.0.0.0:7001
 
   update:
     reboot-strategy: off
