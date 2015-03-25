@@ -2,3 +2,4 @@ packer_cache
 output-parallels-iso
 output-parallels-pvm
 custom-cloud-config.yml
+*.box
