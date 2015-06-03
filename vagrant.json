@@ -1,12 +1,13 @@
 {
   "variables": {
-    "box": null
+    "vm": null,
+    "output": null
   },
 
   "builders": [
     {
       "type": "parallels-pvm",
-      "source_path": "{{ user `box` }}",
+      "source_path": "{{ user `vm` }}",
       "parallels_tools_mode": "disable",
 
       "ssh_username": "core",
@@ -16,5 +17,10 @@
     }
   ],
 
-  "post-processors": [ "vagrant" ]
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "{{ user `output` }}"
+    }
+  ]
 }

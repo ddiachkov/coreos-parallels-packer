@@ -1,34 +1,43 @@
 # coreos-parallels-packer
-This repository contains [Packer](http://www.packer.io) template to generate Parallels VM with stable CoreOS and __parallels tools installed__.
+This repository contains [Packer](http://www.packer.io) templates to generate CoreOS Parallels VM with __parallels tools installed__.
+
+## Prerequisites
+* [Packer](https://packer.io/intro/getting-started/setup.html)
+* [Parallels Desktop 10](http://www.parallels.com/products/desktop)
+* [Parallels Virtualization SDK 10](http://www.parallels.com/download/pvsdk)
 
 ## Usage
-First of all you'll need to [install](https://packer.io/intro/getting-started/setup.html) packer and of course Parallels Desktop 10.
-
 To build base image:
 ```shell
-packer build -force coreos.json
+make coreos COREOS_VERSION="..."
 ```
-Box will be generated in directory `output-parallels-iso`.
+Where COREOS_VERSION is "stable" (default), "beta" or "alpha"
+Result VM will be generated in directory `output/coreos`.
 
-To install Parallels tools to base image:
+To build base image AND install Parallels tools to it:
 ```shell
-packer build -force coreos.json && packer build -force coreos-prlt.json
+make coreos-prlt COREOS_VERSION="..."
 ```
-Box will be generated in directory `output-parallels-pvm`.
+Result VM will be generated in directory `output/coreos-prlt`.
 
-By default you can logon to generated box with vagrant insecure key:
+By default you can logon to generated machine with vagrant insecure key:
 ```shell
 ssh -i keys/vagrant core@<ip-address>
 ```
 
-You can also pass custom cloud-config (only base image):
+You can also pass custom cloud-config:
 ```shell
-packer build -force -var="cloud-config=custom-cloud-config.yml" coreos.json
+make coreos COREOS_CLOUD_CONFIG="custom-cloud-config.yml"
 ```
 
-## Vagrant
-If you want Vagrant box then run:
+### Vagrant
+To generate Vagrant box without parallels tools:
 ```shell
-packer build -force -var "box=output-parallels-iso/packer-parallels-iso.pvm" vagrant.json
+make vagrant COREOS_VERSION="..."
 ```
-Where `box` is path to generated VM. Vagrant box will be generated in current directory.
+
+To generate Vagrant box with parallels tools:
+```shell
+make vagrant-prlt COREOS_VERSION="..."
+```
+Box will be generated in `output/vagrant`.

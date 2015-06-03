@@ -1,15 +1,18 @@
 {
   "variables": {
-    "cloud-config": "cloud-config.yml"
+    "coreos-release": "stable",
+    "cloud-config": "cloud-config.yml",
+    "iso-checksum": "",
+    "iso-checksum-type": "none"
   },
 
   "builders": [
     {
       "type": "parallels-iso",
       "guest_os_type": "linux-2.6",
-      "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
-      "iso_checksum": "9c24586a8655262dfbd6a3c3f5ab07c7",
-      "iso_checksum_type": "md5",
+      "iso_url": "http://{{ user `coreos-release` }}.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
+      "iso_checksum": "{{ user `iso-checksum` }}",
+      "iso_checksum_type": "{{ user `iso-checksum-type` }}",
       "parallels_tools_mode": "disable",
 
       "http_directory": ".",
@@ -17,7 +20,7 @@
       "ssh_username": "core",
       "ssh_key_path": "keys/vagrant",
 
-      "boot_wait": "10s",
+      "boot_wait": "15s",
       "boot_command": [
         "wget -O ~/.ssh/authorized_keys http://{{ .HTTPIP }}:{{ .HTTPPort }}/keys/vagrant.pub",
         "<enter>",
@@ -32,7 +35,10 @@
       "prlctl" : [
         [ "set", "{{ .Name }}", "--memsize", "1024" ],
         [ "set", "{{ .Name }}", "--cpus", "2" ]
-      ]
+      ],
+
+      "output_directory": "output/coreos",
+      "vm_name": "coreos-{{ user `coreos-release` }}"
     }
   ],
 
@@ -46,7 +52,7 @@
     {
       "type": "shell",
       "inline": [
-        "sudo coreos-install -C stable -c /tmp/cloud-config.yml -d /dev/sda"
+        "sudo coreos-install -C {{ user `coreos-release` }} -c /tmp/cloud-config.yml -d /dev/sda"
       ]
     }
   ]

@@ -2,12 +2,15 @@
 
 set -e
 
+# By default we are using stable developer image
+COREOS_RELEASE="${COREOS_RELEASE:-stable}"
+
 # Mount parallels tools CD
 sudo mount /dev/sr1 /mnt
 
-# Downlod dev container
+# Download dev container
 rm -f coreos_developer_container.bin
-wget http://stable.release.core-os.net/amd64-usr/current/coreos_developer_container.bin.bz2
+wget http://$COREOS_RELEASE.release.core-os.net/amd64-usr/current/coreos_developer_container.bin.bz2
 bunzip2 coreos_developer_container.bin.bz2
 
 # Start dev container
